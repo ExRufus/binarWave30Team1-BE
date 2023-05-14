@@ -1,7 +1,7 @@
 const { getPlayer } = require("../../Controllers/User.controller");
+const UserController = require("../../Controllers/User.controller");
 const PlayerRouter = require("express").Router();
 
-
-PlayerRouter.get("/", getPlayer)
-
+PlayerRouter.get("/", getPlayer);
+PlayerRouter.delete("/:id", UserController.deletePlayer);
 module.exports = PlayerRouter;
