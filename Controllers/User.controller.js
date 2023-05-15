@@ -2,6 +2,44 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 // 1. fungsi create player / register - vincent
+const createUser = async(req, res) => {
+  try {
+    const { Email, Username, Password, Total_score, Biodata, City } = req.body;
+    const player = await prisma.user.create();
+
+    if (!Email || !Username) {
+      return res
+        .status(404)
+        .json({
+          result: "Failed",
+          message: "username or email cannot empty",
+      });
+    }
+    
+    if (!Password) {
+      return res
+        .status(404)
+        .json({
+          result: "Failed",
+          message: "password cannot be empty",
+      });
+    }
+
+    const newUser = { Email, Username, Password, Total_score, Biodata, City }
+    const createdUser = await prisma.user.create(newUser);
+    if (createdUser) {
+      return res
+        .status(200)
+        .json({
+          result: "success",
+          data: createdUser
+      })
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 // 2. fungsi get player - auda
 async function getPlayer(req, res, next) {
   try {
@@ -11,13 +49,13 @@ async function getPlayer(req, res, next) {
         result: "Success",
         players,
       });
-    } if (!players){
+    }
+    if (!players) {
       return res.status(400).json({
         result: "error",
-        message: 'Tidak ada data',
-      })
+        message: "Tidak ada data",
+      });
     }
-  
   } catch (error) {
     next(error);
   }
@@ -79,7 +117,7 @@ async function updateUser(req, res, next) {
       });
     }
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 }
 
@@ -95,13 +133,7 @@ async function deletePlayer(req, res, next) {
   } catch (error) {
     res.status(400).json({ msg: error.message });
   }
-};
+}
 // 6, fungsi login player - mirza
 
-module.exports = { getPlayer, updateUser, deletePlayer, getPlayerById };
-
-// - login /users = mirza 
-// - create /users = akmal
-// - create room = adan
-// - get all room - /games = labib
-// - get room by id - /games =  auda
+module.exports = { getPlayer, updateUser, deletePlayer, getPlayerById, createUser };
