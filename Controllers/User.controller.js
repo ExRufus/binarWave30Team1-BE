@@ -1,5 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 // 1. fungsi create player / register - vincent
@@ -18,14 +17,34 @@ async function getPlayer(req, res, next) {
   }
 }
 // 3. fungsi get player berdasarkan id - adan
-
+async function getPlayerById(req, res, next) {
+  const { id } = req.params;
+  try {
+    const players = await prisma.user.findUnique({
+      where: { id },
+    });
+    if (!players) {
+      return res.status(400).json({
+        result: "users not found!",
+      });
+    }
+    res
+      .status(200)
+      .json({ message: "success get player by id", data: players });
+  } catch (error) {
+    next(error);
+  }
+}
 // 4. fungsi update player - akmal
 async function updateUser(req, res, next) {
   try {
     const { id } = req.params;
-    const findUser = await prisma.user.findUnique({where: {id}});
-    
-    if (!findUser) return res.status(404).json({result: 'not found', message: `Player with ${id} not found`})
+    const findUser = await prisma.user.findUnique({ where: { id } });
+
+    if (!findUser)
+      return res
+        .status(404)
+        .json({ result: "not found", message: `Player with ${id} not found` });
 
     const { Email, Username, Password, Total_score, Biodata, City } = req.body;
 
@@ -33,15 +52,15 @@ async function updateUser(req, res, next) {
       const updateData = await prisma.user.update({
         where: { id },
         data: {
-          Email,       
-          Username,    
-          Password,    
-          Total_score, 
-          Biodata,     
+          Email,
+          Username,
+          Password,
+          Total_score,
+          Biodata,
           City,
         },
-    });
-      
+      });
+
       res.status(200).json({
         result: "Success",
         message: `User with id = ${id} berhasil di update`,
@@ -49,8 +68,8 @@ async function updateUser(req, res, next) {
       });
     } else {
       res.status(500).json({
-        result: 'Error',
-        message: 'Internal Server Error',
+        result: "Error",
+        message: "Internal Server Error",
       });
     }
   } catch (error) {
@@ -73,4 +92,4 @@ export const deletePlayer = async (req, res) => {
 };
 // 6, fungsi login player - mirza
 
-module.exports = { getPlayer, updateUser, deletePlayer };
+module.exports = { getPlayer, updateUser, deletePlayer, getPlayerById };
