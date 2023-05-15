@@ -1,4 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 // 1. fungsi create player / register - vincent
