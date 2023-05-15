@@ -1,8 +1,7 @@
+const { getRoom } = require("../../Controllers/Game.controller");
 const GameRouter = require("express").Router();
 
+//router Room
+GameRouter.get("/rooms", getRoom);
 
-GameRouter.get("/", (req, res) => {
-    res.send("tempat game controller");
-  });
-GameRouter.get("")
 module.exports = GameRouter;
