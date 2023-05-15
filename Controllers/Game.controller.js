@@ -51,6 +51,24 @@ async function getRoom(req, res, next) {
   }
 }
 // 2. fungsi get room berdasarkan id
+async function getRoomById(req, res, next) {
+  const { id } = req.params;
+  try {
+    const games = await prisma.game.findUnique({
+      where: { id },
+    });
+    if (!games) {
+      return res.status(400).json({
+        result: "room not found!",
+      });
+    }
+    res
+      .status(200)
+      .json({ message: "success get room by id", data: games });
+  } catch (error) {
+    next(error);
+  }
+}
 
-module.exports = { createRoom, getRoom };
+module.exports = { createRoom, getRoom, getRoomById };
 
