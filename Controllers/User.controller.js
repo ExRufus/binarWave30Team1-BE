@@ -72,4 +72,4 @@ export const deletePlayer = async (req, res) => {
 };
 // 6, fungsi login player - mirza
 
-module.exports = {getPlayer, updateUser, deletePlayer};
+module.exports = { getPlayer, updateUser, deletePlayer };
