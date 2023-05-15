@@ -4,7 +4,7 @@ const flash = require("express-flash");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const cookieParser = require("cookie-parser");
-const apiRouter = require("./Routes");
+const apiRouter = require("./Routes/router");
 const app = express();
 require("dotenv").config();
 const PORT = process.env.PORT;
@@ -15,7 +15,7 @@ app.use(cookieParser());
 
 app.use(flash());
 
-app.use("/", apiRouter);
+app.use("/", apiRouter); // localhost:<PORT>
 
 app.listen(PORT, () => {
   console.log(`server sudah connect di http://localhost:${PORT}`);
