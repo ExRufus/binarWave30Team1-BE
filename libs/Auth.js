@@ -6,18 +6,31 @@ function checkPassword(incomingPassword, databasePassword) {
     return bcrypt.compareSync(incomingPassword, databasePassword);
   }
 
-async function authLogin({ email, password }) {
+  async function login(req, res) {
+    const { username, password } = req.body;
     try {
-      const user = await prisma.user.findUnique({ where: { email } });
-      if (!user) return Promise.reject("User not found!");
+      const user = await prisma.userGame.findUnique({
+        where: {
+          username,
+        },
+      });
+      if (!user) return res.status(200).json({ message: "user not found !" });
+      const compare = await bcrypt.compare(password, user.password);
+      if (!compare)
+        return res.status(200).json({ message: "password doesnt match" });
   
-      const isPasswordValid = checkPassword(password, user.password);
-      if (!isPasswordValid) return Promise.reject("Wrong password");
-  
-      return user;
-    
-    } catch (error) { 
-      return Promise.reject(error);
+      const token = jwt.sign(
+        { id: user.id, username: user.username },
+        process.env.TOKEN,
+        (err, token) => {
+          res.status(200).json({
+            status: "authorized",
+            token,
+          });
+        }
+      );
+    } catch (error) {
+      res.send(error.message);
     }
   }
 
