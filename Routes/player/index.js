@@ -3,7 +3,7 @@ const {
   getPlayerById,
   deletePlayer,
   updateUser,
-  createUser
+  createUser,
 } = require("../../Controllers/User.controller");
 const PlayerRouter = require("express").Router();
 
@@ -11,6 +11,6 @@ PlayerRouter.get("/", getPlayer);
 PlayerRouter.get("/:id", getPlayerById);
 PlayerRouter.post("/", createUser);
 PlayerRouter.delete("/:id", deletePlayer);
-PlayerRouter.put("/:id", updateUser);ta
+PlayerRouter.put("/:id", updateUser);
 
 module.exports = PlayerRouter;
