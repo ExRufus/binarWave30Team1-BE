@@ -3,8 +3,7 @@ const {
   getPlayerById,
   deletePlayer,
   updateUser,
-  createUser,
-  login
+  createUser
 } = require("../../Controllers/User.controller");
 const PlayerRouter = require("express").Router();
 
