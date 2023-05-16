@@ -4,7 +4,7 @@ const {
   deletePlayer,
   updateUser,
   createUser,
-  login
+  loginPlayer
 } = require("../../Controllers/User.controller");
 const PlayerRouter = require("express").Router();
 
@@ -13,6 +13,6 @@ PlayerRouter.get("/:id", getPlayerById);
 PlayerRouter.post("/", createUser);
 PlayerRouter.delete("/:id", deletePlayer);
 PlayerRouter.put("/:id", updateUser);
-PlayerRouter.post("/login", login);
+PlayerRouter.post("/login", loginPlayer);
 
 module.exports = PlayerRouter;
