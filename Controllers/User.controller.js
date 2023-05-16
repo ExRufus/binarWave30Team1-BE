@@ -119,8 +119,8 @@ async function updateUser(req, res, next) {
 async function deletePlayer(req, res, next) {
   try {
     const { id } = req.params;
-    const deleteUser = await prisma.user.delete({ where: { id } });
-    res.status(200).json(deleteUser);
+    const players = await prisma.user.delete({ where: { id } });
+    res.status(200).json(players);
   } catch (error) {
     res.status(400).json({ msg: error.message });
   }
