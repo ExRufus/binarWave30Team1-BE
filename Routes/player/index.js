@@ -11,6 +11,6 @@ PlayerRouter.get("/", getPlayer);
 PlayerRouter.get("/:id", getPlayerById);
 PlayerRouter.post("/", createUser);
 PlayerRouter.delete("/:id", deletePlayer);
-PlayerRouter.put("/:id", updateUser);
+PlayerRouter.put("/:id", updateUser);ta
 
 module.exports = PlayerRouter;

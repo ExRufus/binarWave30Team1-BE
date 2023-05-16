@@ -108,12 +108,19 @@ async function updateUser(req, res, next) {
 
 // 5, fungsi delete player - labib
 async function deletePlayer(req, res, next) {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
-    const players = await prisma.user.delete({ where: { id } });
-    res.status(200).json(players);
+    const players = await prisma.user.delete({
+      where: {
+        id,
+      },
+    });
+    if (!players) {
+      res.status(400).json({ msg: "cannot delete!" });
+    }
+    res.status(200).json({ msg: "success delete players!" });
   } catch (error) {
-    res.status(400).json({ msg: error.message });
+    res.status(400).json({ msg: error });
   }
 }
 // 6, fungsi login player - mirza
