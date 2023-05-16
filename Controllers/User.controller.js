@@ -18,7 +18,7 @@ const createUser = async (req, res) => {
       },
     });
 
-    if (!Password || !Username) {
+    if (!Email || !Username) {
       return res.status(404).json({
         result: "Failed",
         message: "username or email cannot empty",
@@ -123,11 +123,8 @@ async function updateUser(req, res, next) {
 // 5, fungsi delete player - labib
 async function deletePlayer(req, res, next) {
   try {
-    const players = await prisma.user.delete({
-      where: {
-        id: Number(req.params.id),
-      },
-    });
+    const { id } = req.params;
+    const players = await prisma.user.delete({ where: { id } });
     res.status(200).json(players);
   } catch (error) {
     res.status(400).json({ msg: error.message });
