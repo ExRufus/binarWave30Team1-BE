@@ -1,44 +1,43 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const bcrypt = require("bcrypt");
 
 // 1. fungsi create player / register - vincent
-const createUser = async(req, res) => {
+const createUser = async (req, res) => {
+  const { Email, Username, Password, Total_score, Biodata, City } = req.body;
   try {
-    const { Email, Username, Password, Total_score, Biodata, City } = req.body;
-    const player = await prisma.user.create();
+    const hashedPassword = await bcrypt.hash(Password, 12);
+    const player = await prisma.user.create({
+      data: {
+        Email,
+        Username,
+        Password: hashedPassword,
+        Total_score,
+        Biodata,
+        City,
+      },
+    });
 
-    if (!Email || !Username) {
-      return res
-        .status(404)
-        .json({
-          result: "Failed",
-          message: "username or email cannot empty",
+    if (!Password || !Username) {
+      return res.status(404).json({
+        result: "Failed",
+        message: "username or email cannot empty",
       });
     }
-    
     if (!Password) {
-      return res
-        .status(404)
-        .json({
-          result: "Failed",
-          message: "password cannot be empty",
+      return res.status(404).json({
+        result: "Failed",
+        message: "password cannot be empty",
       });
     }
-
-    const newUser = { Email, Username, Password, Total_score, Biodata, City }
-    const createdUser = await prisma.user.create(newUser);
-    if (createdUser) {
-      return res
-        .status(200)
-        .json({
-          result: "success",
-          data: createdUser
-      })
-    }
+    res.status(200).json({
+      message: "success",
+      data: player,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 // 2. fungsi get player - auda
 async function getPlayer(req, res, next) {
@@ -136,4 +135,10 @@ async function deletePlayer(req, res, next) {
 }
 // 6, fungsi login player - mirza
 
-module.exports = { getPlayer, updateUser, deletePlayer, getPlayerById, createUser };
+module.exports = {
+  getPlayer,
+  updateUser,
+  deletePlayer,
+  getPlayerById,
+  createUser,
+};
