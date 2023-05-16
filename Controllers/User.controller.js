@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcrypt");
+const { authLogin } = require("../libs/Auth");
 
 // 1. fungsi create player / register - vincent
 const createUser = async (req, res) => {
@@ -125,4 +126,21 @@ async function deletePlayer(req, res, next) {
 }
 // 6, fungsi login player - mirza
 
-module.exports = { getPlayer, updateUser, deletePlayer, getPlayerById, createUser };
+function login (req, res) {
+  try {
+      authLogin({ email: req.body.email, password: req.body.password});
+      res.status(200).json({ msg: "login succes!" });
+  
+  } catch (error) {
+      console.log({error});
+      res.status(400).json({ msg: "login failed" });
+  }
+};
+
+module.exports = { 
+  getPlayer, 
+  updateUser, 
+  deletePlayer, 
+  getPlayerById, 
+  createUser,
+  login };
