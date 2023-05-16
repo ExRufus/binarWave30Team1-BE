@@ -13,18 +13,18 @@ datasource db {
 model user {
   id          String @id @default(uuid())
   Email       String @unique
-  Username    String @unique
-  Password    String @unique
-  Total_score String @unique
-  Biodata     String @unique
-  City        String @unique
+  Username    String
+  Password    String
+  Total_score String
+  Biodata     String
+  City        String
 }
 
 model game {
   id            String @id @default(uuid())
-  Name          String @unique
-  Description   String @unique
-  thumbnail_url String @unique
-  Game_url      String @unique
-  play_count    String @unique
+  Name          String
+  Description   String
+  thumbnail_url String
+  Game_url      String
+  play_count    String
 }

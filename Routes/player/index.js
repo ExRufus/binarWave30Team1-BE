@@ -12,6 +12,5 @@ PlayerRouter.get("/:id", getPlayerById);
 PlayerRouter.post("/", createUser);
 PlayerRouter.delete("/:id", deletePlayer);
 PlayerRouter.put("/:id", updateUser);
-PlayerRouter.post("/login", login);
 
 module.exports = PlayerRouter;
