@@ -2,43 +2,37 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 // 1. fungsi create player / register - vincent
-const createUser = async(req, res) => {
+const createUser = async (req, res) => {
   try {
     const { Email, Username, Password, Total_score, Biodata, City } = req.body;
     const player = await prisma.user.create();
 
     if (!Email || !Username) {
-      return res
-        .status(404)
-        .json({
-          result: "Failed",
-          message: "username or email cannot empty",
-      });
-    }
-    
-    if (!Password) {
-      return res
-        .status(404)
-        .json({
-          result: "Failed",
-          message: "password cannot be empty",
+      return res.status(404).json({
+        result: "Failed",
+        message: "username or email cannot empty",
       });
     }
 
-    const newUser = { Email, Username, Password, Total_score, Biodata, City }
+    if (!Password) {
+      return res.status(404).json({
+        result: "Failed",
+        message: "password cannot be empty",
+      });
+    }
+
+    const newUser = { Email, Username, Password, Total_score, Biodata, City };
     const createdUser = await prisma.user.create(newUser);
     if (createdUser) {
-      return res
-        .status(200)
-        .json({
-          result: "success",
-          data: createdUser
-      })
+      return res.status(200).json({
+        result: "success",
+        data: createdUser,
+      });
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 // 2. fungsi get player - auda
 async function getPlayer(req, res, next) {
@@ -124,16 +118,19 @@ async function updateUser(req, res, next) {
 // 5, fungsi delete player - labib
 async function deletePlayer(req, res, next) {
   try {
-    const players = await prisma.user.delete({
-      where: {
-        id: Number(req.params.id),
-      },
-    });
-    res.status(200).json(players);
+    const { id } = req.params;
+    const deleteUser = await prisma.user.delete({ where: { id } });
+    res.status(200).json(deleteUser);
   } catch (error) {
     res.status(400).json({ msg: error.message });
   }
 }
 // 6, fungsi login player - mirza
 
-module.exports = { getPlayer, updateUser, deletePlayer, getPlayerById, createUser };
+module.exports = {
+  getPlayer,
+  updateUser,
+  deletePlayer,
+  getPlayerById,
+  createUser,
+};
