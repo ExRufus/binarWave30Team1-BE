@@ -1,4 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
+const { authLogin, generateToken } = require("../libs/Auth");
 const prisma = new PrismaClient();
 
 // 1. fungsi create player / register - vincent
@@ -136,4 +137,25 @@ async function deletePlayer(req, res, next) {
 }
 // 6, fungsi login player - mirza
 
-module.exports = { getPlayer, updateUser, deletePlayer, getPlayerById, createUser };
+async function login(req, res) {
+  try {
+    const user = await authLogin(req.body);
+    const token = generateToken(user);
+    res.cookie('CH9', token)
+    res.status(200).json({
+      result: "Success",
+    });
+  } catch (error) {
+    
+  }
+}
+
+
+module.exports = { 
+  getPlayer, 
+  updateUser, 
+  deletePlayer, 
+  getPlayerById, 
+  createUser,
+  login
+ };
