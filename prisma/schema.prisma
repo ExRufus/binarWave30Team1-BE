@@ -15,7 +15,7 @@ model user {
   Email       String @unique
   Username    String
   Password    String
-  Total_score String
+  Total_score Int
   Biodata     String
   City        String
 }
@@ -26,5 +26,5 @@ model game {
   Description   String
   thumbnail_url String
   Game_url      String
-  play_count    String
+  play_count    Int
 }
