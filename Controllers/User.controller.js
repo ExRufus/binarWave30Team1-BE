@@ -1,7 +1,9 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const bcrypt = require("bcrypt");
-const { authLogin } = require("../libs/Auth");
+const bcrypt = require('bcrypt');
+const { authLogin } = require('../libs/Auth');
+const jwt = require('jsonwebtoken');
 
 // 1. fungsi create player / register - vincent
 const createUser = async (req, res) => {
@@ -21,18 +23,18 @@ const createUser = async (req, res) => {
 
     if (!Email || !Username) {
       return res.status(404).json({
-        result: "Failed",
-        message: "username or email cannot empty",
+        result: 'Failed',
+        message: 'username or email cannot empty',
       });
     }
     if (!Password) {
       return res.status(404).json({
-        result: "Failed",
-        message: "password cannot be empty",
+        result: 'Failed',
+        message: 'password cannot be empty',
       });
     }
     res.status(200).json({
-      message: "success",
+      message: 'success',
       data: player,
     });
   } catch (error) {
@@ -46,14 +48,15 @@ async function getPlayer(req, res, next) {
     const players = await prisma.user.findMany();
     if (players) {
       return res.status(200).json({
-        result: "Success",
+        result: 'Success',
+        result: 'Success',
         players,
       });
     }
     if (!players) {
       return res.status(400).json({
-        result: "error",
-        message: "Tidak ada data",
+        result: 'error',
+        message: 'Tidak ada data',
       });
     }
   } catch (error) {
@@ -69,12 +72,12 @@ async function getPlayerById(req, res, next) {
     });
     if (!players) {
       return res.status(400).json({
-        result: "users not found!",
+        result: 'users not found!',
       });
     }
     res
       .status(200)
-      .json({ message: "success get player by id", data: players });
+      .json({ message: 'success get player by id', data: players });
   } catch (error) {
     next(error);
   }
@@ -98,7 +101,7 @@ async function updateUser(req, res, next) {
     });
 
     res.status(200).json({
-      result: "Success",
+      result: 'Success',
       message: `User with id = ${id} berhasil di update`,
       data: updateData,
     });
@@ -117,30 +120,42 @@ async function deletePlayer(req, res, next) {
       },
     });
     if (!players) {
-      res.status(400).json({ msg: "cannot delete!" });
+      res.status(400).json({ msg: 'cannot delete!' });
     }
-    res.status(200).json({ msg: "success delete players!" });
+    res.status(200).json({ msg: 'success delete players!' });
   } catch (error) {
     res.status(400).json({ msg: error });
   }
 }
 // 6, fungsi login player - mirza
 
-function login (req, res) {
+async function loginPlayer(req, res) {
   try {
-      authLogin({ email: req.body.email, password: req.body.password});
-      res.status(200).json({ msg: "login succes!" });
-  
-  } catch (error) {
-      console.log({error});
-      res.status(400).json({ msg: "login failed" });
-  }
-};
+    authLogin({ email: req.body.email, password: req.body.password });
+    res.status(200).json({ msg: 'login succes!' });
 
-module.exports = { 
-  getPlayer, 
-  updateUser, 
-  deletePlayer, 
-  getPlayerById, 
+    const user = await loginPlayer(req.body);
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.SECRET_KEY,
+      {
+        expiresIn: '1h',
+      },
+    );
+    req.session.token = token;
+    res.redirect('/');
+  } catch (error) {
+    console.log({ error });
+    res.status(400).json({ msg: 'login failed' });
+    res.redirect('/login');
+  }
+}
+
+module.exports = {
+  getPlayer,
+  updateUser,
+  deletePlayer,
+  getPlayerById,
   createUser,
-  login };
+  loginPlayer,
+};
