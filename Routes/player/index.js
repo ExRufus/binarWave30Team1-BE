@@ -17,3 +17,6 @@ PlayerRouter.put("/:id", updateUser);
 PlayerRouter.post("/login", loginController);
 
 module.exports = PlayerRouter;
+
+
+//notes api - public / private 

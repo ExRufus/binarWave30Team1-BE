@@ -8,3 +8,6 @@ apiRouter.use("/games", GameRouter);
 apiRouter.use("/api", api)
 
 module.exports = apiRouter;
+
+
+//Route - notes - 
