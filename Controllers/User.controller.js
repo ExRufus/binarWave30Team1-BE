@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const { authLogin } = require('../libs/Auth');
 const jwt = require('jsonwebtoken');
 
+
 // 1. fungsi create player / register - vincent
 const createUser = async (req, res) => {
   const { Email, Username, Password, Total_score, Biodata, City } = req.body;
@@ -128,7 +129,26 @@ async function deletePlayer(req, res, next) {
   }
 }
 // 6, fungsi login player - mirza
+async function loginController(req, res) {
+  try {
+    const user = await login(req.body);
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.SECRET_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
 
+    req.session.token = token;
+    console.log(req.session);
+    res.redirect("/");
+  } catch (error) {
+    res.redirect("/login");
+  }
+}
+
+/*
 async function loginPlayer(req, res) {
   try {
     authLogin({ email: req.body.email, password: req.body.password });
@@ -150,6 +170,7 @@ async function loginPlayer(req, res) {
     res.redirect('/login');
   }
 }
+*/
 
 module.exports = {
   getPlayer,
@@ -157,5 +178,5 @@ module.exports = {
   deletePlayer,
   getPlayerById,
   createUser,
-  loginPlayer,
+  loginController,
 };
