@@ -9,5 +9,5 @@ router.use("/players", PlayerRouter);
 router.use("/games", authOnly, GameRouter);
 
 // login handler
-router.get("/auth/login", login);
+router.post("/auth/login", login);
 module.exports = router;

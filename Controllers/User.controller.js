@@ -1,14 +1,13 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 
 // 1. fungsi create player / register - vincent
 const register = async (req, res) => {
   const { Email, Username, Password, Total_score, Biodata, City } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(Password, 12);
-    const player = await prisma.user.register({
+    const player = await prisma.user.create({
       data: {
         Email,
         Username,
