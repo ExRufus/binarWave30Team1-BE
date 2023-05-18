@@ -1,16 +1,14 @@
 const { PrismaClient } = require("@prisma/client");
-const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcrypt");
-const { authLogin } = require("../libs/Auth");
 const jwt = require("jsonwebtoken");
 
 // 1. fungsi create player / register - vincent
-const createUser = async (req, res) => {
+const register = async (req, res) => {
   const { Email, Username, Password, Total_score, Biodata, City } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(Password, 12);
-    const player = await prisma.user.create({
+    const player = await prisma.user.register({
       data: {
         Email,
         Username,
@@ -43,7 +41,7 @@ const createUser = async (req, res) => {
 };
 
 // 2. fungsi get player - auda
-async function getPlayer(req, res, next) {
+async function getPlayers(req, res, next) {
   try {
     const players = await prisma.user.findMany();
     if (players) {
@@ -83,7 +81,7 @@ async function getPlayerById(req, res, next) {
   }
 }
 // 4. fungsi update player - akmal
-async function updateUser(req, res, next) {
+async function updatePlayer(req, res, next) {
   try {
     const { id } = req.params;
     const { Email, Username, Password, Total_score, Biodata, City } = req.body;
@@ -127,55 +125,11 @@ async function deletePlayer(req, res, next) {
     res.status(400).json({ msg: error });
   }
 }
-// 6, fungsi login player - mirza
-async function loginController(req, res) {
-  try {
-    const user = await login(req.body);
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      process.env.SECRET_KEY,
-      {
-        expiresIn: "1h",
-      }
-    );
-
-    req.session.token = token;
-    console.log(req.session);
-    res.redirect("/");
-  } catch (error) {
-    res.redirect("/login");
-  }
-}
-
-/*
-async function loginPlayer(req, res) {
-  try {
-    authLogin({ email: req.body.email, password: req.body.password });
-    res.status(200).json({ msg: 'login succes!' });
-
-    const user = await loginPlayer(req.body);
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      process.env.SECRET_KEY,
-      {
-        expiresIn: '1h',
-      },
-    );
-    req.session.token = token;
-    res.redirect('/');
-  } catch (error) {
-    console.log({ error });
-    res.status(400).json({ msg: 'login failed' });
-    res.redirect('/login');
-  }
-}
-*/
 
 module.exports = {
-  getPlayer,
-  updateUser,
+  getPlayers,
+  updatePlayer,
   deletePlayer,
   getPlayerById,
-  createUser,
-  loginController,
+  register,
 };

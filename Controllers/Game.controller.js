@@ -12,8 +12,6 @@ const createRoom = async (req, res) => {
         thumbnail_url,
         Game_url,
         play_count,
-        // category
-        // isAvalable
       },
     });
     if (!room) {
@@ -22,7 +20,7 @@ const createRoom = async (req, res) => {
       });
     }
     res.status(202).json({
-      message: "success create room ",  
+      message: "success create room ",
       data: room,
     });
   } catch (error) {
@@ -31,7 +29,7 @@ const createRoom = async (req, res) => {
 };
 
 // 1. fungsi get room labib
-async function getRoom(req, res, next) {
+async function getRooms(req, res, next) {
   try {
     const rooms = await prisma.game.findMany();
     if (rooms) {
@@ -62,13 +60,10 @@ async function getRoomById(req, res, next) {
         result: "room not found!",
       });
     }
-    res
-      .status(200)
-      .json({ message: "success get room by id", data: games });
+    res.status(200).json({ message: "success get room by id", data: games });
   } catch (error) {
     next(error);
   }
 }
 
-module.exports = { createRoom, getRoom, getRoomById };
-
+module.exports = { createRoom, getRooms, getRoomById };
