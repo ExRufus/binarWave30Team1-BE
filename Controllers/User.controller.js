@@ -31,8 +31,7 @@ const register = async (req, res) => {
       });
     }
     res.status(200).json({
-      message: "success",
-      data: player,
+      message: "success create data !",
     });
   } catch (error) {
     console.log(error); // res.status(500)
@@ -43,19 +42,17 @@ const register = async (req, res) => {
 async function getPlayers(req, res, next) {
   try {
     const players = await prisma.user.findMany();
-    if (players) {
-      return res.status(200).json({
-        result: "Success",
-        result: "Success",
-        players,
-      });
-    }
+
     if (!players) {
       return res.status(400).json({
         result: "error",
         message: "Tidak ada data",
       });
     }
+    res.status(200).json({
+      result: "Success",
+      payload: players,
+    });
   } catch (error) {
     next(error);
   }

@@ -17,12 +17,15 @@ async function login(req, res) {
     if (!user) return res.status(401).json({ msg: "user not found ea kaka !" });
     const compare = await bcrypt.compare(Password, user.Password);
     if (!compare)
-      return res.status(200).json({ message: "password doesnt match" });
+      return res
+        .status(200)
+        .json({ auth: false, message: "password doesnt match" });
     const token = jwt.sign(
       { id: user.id, Username: user.Username },
       process.env.TOKEN,
       (err, token) => {
         res.status(200).json({
+          auth: true,
           status: "authorized",
           token,
         });

@@ -6,13 +6,13 @@ const authOnly = (req, res, next) => {
     const token = authHeader.split(" ")[1];
     jwt.verify(token, process.env.TOKEN, (err, user) => {
       if (err) {
-        return res.status(403).json({ message: "forbidden" });
+        return res.status(403).json({ auth: false, message: "forbidden" });
       }
       req.user = user;
       next();
     });
   } else {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ auth: false, message: "Unauthorized" });
   }
 };
 
