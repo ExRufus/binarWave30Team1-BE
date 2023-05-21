@@ -11,8 +11,9 @@ const authOnly = (req, res, next) => {
       req.user = user;
       next();
     });
+  } else {
+    return res.status(401).json({ auth: false, message: "Unauthorized" });
   }
-  res.status(401).json({ auth: false, message: "Unauthorized" });
 };
 
 module.exports = authOnly;
