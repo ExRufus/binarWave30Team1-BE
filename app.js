@@ -4,12 +4,14 @@ const flash = require("express-flash");
 const cookieParser = require("cookie-parser");
 const routes = require("./Routes");
 const app = express();
+const cors = require("cors");
 require("dotenv").config();
 const PORT = process.env.PORT;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("./views"));
 app.use(cookieParser());
+app.use(cors());
 
 app.use(flash());
 app.get("/", (req, res) => {
