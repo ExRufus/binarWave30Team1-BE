@@ -66,4 +66,29 @@ async function getRoomById(req, res, next) {
   }
 }
 
-module.exports = { createRoom, getRooms, getRoomById };
+const bulkCreateGames = () => {
+  try {
+  } catch (error) {}
+};
+
+const deleteAllGames = async (req, res) => {
+  try {
+    const deletAll = await prisma.game.deleteMany({});
+    res.status(200).json({ msg: "sucess delete all" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+const bulkCreate = async (req, res) => {
+  try {
+    const create = await prisma.game.createMany({});
+    res.status(200).json({ msg: "data created 10" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+module.exports = {
+  createRoom,
+  getRooms,
+  getRoomById,
+};
