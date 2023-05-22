@@ -5,20 +5,20 @@ const jwt = require("jsonwebtoken");
 async function login(req, res) {
   const { Username, Password } = req.body;
   try {
+    if (!Username)
+      return res.status(401).json({ msg: "user cannot be empty!" });
+    if (!Password)
+      return res.status(401).json({ msg: "password cannot be empty!" });
     const user = await prisma.user.findUnique({
       where: {
         Username,
       },
     });
-    if (!Username)
-      return res.status(401).json({ msg: "user cannot be empty!" });
-    if (!Password)
-      return res.status(401).json({ msg: "password cannot be empty!" });
     if (!user) return res.status(401).json({ msg: "user not found ea kaka !" });
     const compare = await bcrypt.compare(Password, user.Password);
     if (!compare)
       return res
-        .status(400)
+        .status(401)
         .json({ auth: false, message: "password doesnt match" });
     const token = jwt.sign(
       { id: user.id, Username: user.Username },
