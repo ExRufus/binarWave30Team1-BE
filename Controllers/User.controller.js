@@ -34,7 +34,7 @@ const register = async (req, res) => {
       message: "success create data !",
     });
   } catch (error) {
-    console.log(error); // res.status(500)
+    res.status(500).json({ msg: error.message });
   }
 };
 
