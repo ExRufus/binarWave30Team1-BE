@@ -18,7 +18,7 @@ async function login(req, res) {
     const compare = await bcrypt.compare(Password, user.Password);
     if (!compare)
       return res
-        .status(200)
+        .status(400)
         .json({ auth: false, message: "password doesnt match" });
     const token = jwt.sign(
       { id: user.id, Username: user.Username },
