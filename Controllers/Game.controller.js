@@ -68,12 +68,20 @@ async function getRoomById(req, res, next) {
 
 const updateScore = async (req, res) => {
   const { id } = req.params;
-  const { Total_score } = req.body;
-  const data = await prisma.game.update({
-    where: {
-      id,
-    },
-  });
+  const { thumbnail_url } = req.body;
+  try {
+    const data = await prisma.game.update({
+      where: {
+        id,
+      },
+      data: {
+        thumbnail_url,
+      },
+    });
+    res.status(200).json({ msg: "success update rooms !", data });
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 const bulkCreateGames = () => {
