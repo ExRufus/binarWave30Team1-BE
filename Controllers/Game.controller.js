@@ -68,17 +68,24 @@ async function getRoomById(req, res, next) {
 
 const updateScore = async (req, res) => {
   const { id } = req.params;
-  const { thumbnail_url } = req.body;
   try {
+    const getData = await prisma.game.findUnique({
+      where: {
+        id,
+      },
+    });
+    const visitedRoom = ++getData.play_count;
     const data = await prisma.game.update({
       where: {
         id,
       },
       data: {
-        thumbnail_url,
+        play_count: visitedRoom,
       },
     });
-    res.status(200).json({ msg: "success update rooms !", data });
+    res
+      .status(200)
+      .json({ msg: "success update rooms !", data: data.play_count });
   } catch (error) {
     console.log(error.message);
   }

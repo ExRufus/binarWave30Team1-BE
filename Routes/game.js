@@ -5,7 +5,7 @@ const Router = require("express").Router();
 Router.post("/rooms", gameRoom.createRoom);
 Router.get("/rooms", gameRoom.getRooms);
 Router.get("/rooms/:id", gameRoom.getRoomById);
-Router.put("/rooms/:id", gameRoom.updateScore);
+Router.post("/rooms/:id/plays", gameRoom.updateScore);
 // Router.post("/rooms/delete", gameRoom.deleteAllGames);
 // Router.post("/rooms/createmany", gameRoom.bulkCreate);
 
