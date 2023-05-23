@@ -66,6 +66,16 @@ async function getRoomById(req, res, next) {
   }
 }
 
+const updateScore = async (req, res) => {
+  const { id } = req.params;
+  const { Total_score } = req.body;
+  const data = await prisma.game.update({
+    where: {
+      id,
+    },
+  });
+};
+
 const bulkCreateGames = () => {
   try {
   } catch (error) {}
@@ -91,4 +101,5 @@ module.exports = {
   createRoom,
   getRooms,
   getRoomById,
+  updateScore,
 };
