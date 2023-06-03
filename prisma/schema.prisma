@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -22,7 +19,7 @@ model user {
 
 model game {
   id            String @id @default(uuid())
-  Name          String
+  Name          String @unique
   Description   String
   thumbnail_url String
   Game_url      String
